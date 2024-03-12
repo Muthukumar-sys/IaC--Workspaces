@@ -1,5 +1,5 @@
 # versions.tf
 
 terraform {
-  required_version = ">= 0.13, < 0.14"
+  required_version = ">= 0.13, < 1.7.4"
 }
