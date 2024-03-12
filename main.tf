@@ -1,35 +1,13 @@
-// main.tf
+# main.tf
 
-provider "azurerm" {
-  features {}
-}
+module "azure_workspaces" {
+  source = "./modules/azure_workspaces"
+  for_each = var.workspace_configurations
 
-// Define variables
-variable "resource_group_name" {
-  description = "The name of the resource group"
-}
-
-variable "location" {
-  description = "The Azure region"
-  default     = "East US"
-}
-
-variable "workspace_names" {
-  description = "List of names for the Terraform workspaces"
-  type        = list(string)
-  default     = ["workspace1", "workspace2", "workspace3"]
-}
-
-// Create resource group
-resource "azurerm_resource_group" "rg" {
-  name     = var.resource_group_name
-  location = var.location
-}
-
-// Create multiple workspaces
-resource "azurerm_workspace" "workspace" {
-  for_each           = toset(var.workspace_names)
-  name               = each.key
-  location           = azurerm_resource_group.rg.location
-  resource_group_name = azurerm_resource_group.rg.name
+  organization_name    = var.organization_name
+  workspace_name       = each.key
+  auto_apply           = each.value.auto_apply
+  queue_all_runs       = each.value.queue_all_runs
+  azure_subscription_id = var.azure_subscription_id
+  azure_region          = var.azure_region
 }
