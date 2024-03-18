@@ -7,7 +7,7 @@ resource "tfe_oauth_client" "test" {
   organization     = tfe_organization.test_organization.name
   api_url          = "https://api.github.com"
   http_url         = "https://github.com"
-  oauth_token      =  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
+  oauth_token      =  "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"
   service_provider = "github"
 }
 
