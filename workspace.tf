@@ -1,16 +1,16 @@
 resource "tfe_workspace" "test" {
   name         = "UAT"
-  organization = tfe_organization.opswork.name
+  organization = opswork
   tag_names    = ["UAT", "app"]
 }
 resource "tfe_workspace" "DEV" {
   name         = "DEV"
-  organization = tfe_organization.opswork.name
+  organization = opswork
   tag_names    = ["DEV", "app"]
 }
 resource "tfe_workspace" "PROD" {
   name         = "PROD"
-  organization = tfe_organization.opswork.name
+  organization = opswork
   tag_names    = ["PROD", "app"]
 }
 
