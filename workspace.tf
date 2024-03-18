@@ -1,5 +1,5 @@
 resource "tfe_organization" "test-organization" {
-  name  = "opswork"
+  name  = "my-org-name"
   email = "admin@company.com"
 }
 
@@ -13,17 +13,6 @@ resource "tfe_oauth_client" "test" {
 
 resource "tfe_workspace" "parent" {
   name                 = "parent-ws"
-  organization         = test-organization
-  queue_all_runs       = false
-  vcs_repo {
-    branch             = "main"
-    identifier         = "my-org-name/vcs-repository"
-    oauth_token_id     = tfe_oauth_client.test.oauth_token_id
-  }
-}
-
-resource "tfe_workspace" "child" {
-  name                 = "child-ws"
   organization         = tfe_organization.test-organization
   queue_all_runs       = false
   vcs_repo {
@@ -34,37 +23,14 @@ resource "tfe_workspace" "child" {
 }
 
 resource "tfe_workspace_run" "ws_run_parent" {
-  workspace_id    = tfe_workspace.parent.id
+  workspace_id     = tfe_workspace.parent.id
 
   apply {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 5
-    retry_backoff_min = 5
+    manual_confirm = true
   }
 
   destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 3
-    retry_backoff_min = 10
-  }
-}
-
-resource "tfe_workspace_run" "ws_run_child" {
-  workspace_id    = tfe_workspace.child.id
-  depends_on   = [tfe_workspace_run.ws_run_parent]
-
-  apply {
-    manual_confirm    = false
-    retry_attempts    = 5
-    retry_backoff_min = 5
-  }
-
-  destroy {
-    manual_confirm    = false
-    wait_for_run      = true
-    retry_attempts    = 3
-    retry_backoff_min = 10
+    manual_confirm = true
+    wait_for_run   = true
   }
 }
