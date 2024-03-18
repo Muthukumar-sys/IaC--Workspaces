@@ -1,4 +1,4 @@
-resource "tfe_organization" "test-organization" {
+resource "tfe_organization" "test_organization" {
   name  = "my-org-name"
   email = "admin@company.com"
 }
@@ -13,7 +13,7 @@ resource "tfe_oauth_client" "test" {
 
 resource "tfe_workspace" "parent" {
   name                 = "parent-ws"
-  organization         = tfe_organization.test-organization
+  organization         = tfe_organization.test_organization
   queue_all_runs       = false
   vcs_repo {
     branch             = "main"
