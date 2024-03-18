@@ -1,32 +1,10 @@
-resource "null_resource" "create_workspace" {
-  count = length(var.workspace_names)
+resource "tfe_organization" "test-organization" {
+  name  = "my-org-name"
+  email = "admin@company.com"
+}
 
-  triggers = {
-    create_workspace = "${timestamp()}"
-  }
-
-  provisioner "local-exec" {
-    command = <<EOF
-      curl \
-        --header "Authorization: Bearer ${var.terraform_cloud_token}" \
-        --header "Content-Type: application/vnd.api+json" \
-        --request POST \
-        --data '{
-          "data": {
-            "type": "workspaces",
-            "attributes": {
-              "name": "${var.workspace_names[count.index]}",
-              "organization": {
-                "name": "${var.organization_name}"
-              },
-              "vcs-repo": {
-                "identifier": "${var.vcs_repo_identifier}",
-                "oauth-token-id": "${var.vcs_oauth_token_id}"
-              }
-            }
-          }
-        }' \
-        https://app.terraform.io/api/v2/organizations/${var.organization_name}/workspaces
-    EOF
-  }
+resource "tfe_workspace" "test" {
+  name         = "my-workspace-name"
+  organization = tfe_organization.test-organization.name
+  tag_names    = ["test", "app"]
 }
