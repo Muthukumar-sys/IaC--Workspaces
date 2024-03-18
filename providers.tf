@@ -1,13 +1,6 @@
-#providers.tf
-
 terraform {
   required_providers {
-    azurerm = {
-      source  = "hashicorp/azurerm"
+    tfe = {
+      version = "~> 0.53.0"
     }
-  }
-}
-
-provider "azurerm" {
-  features {}
-}
+  
