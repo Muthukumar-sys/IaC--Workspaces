@@ -13,7 +13,7 @@ resource "tfe_oauth_client" "test" {
 
 resource "tfe_workspace" "parent" {
   name                 = "parent-ws"
-  organization         = tfe_organization.test_organization
+  organization         = tfe_organization.test_organization.name
   queue_all_runs       = false
   vcs_repo {
     branch             = "main"
